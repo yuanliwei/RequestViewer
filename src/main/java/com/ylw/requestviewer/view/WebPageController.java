@@ -2,6 +2,7 @@ package com.ylw.requestviewer.view;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.util.TextUtils;
 
 import com.ylw.requestviewer.controller.BaseController;
 
@@ -35,7 +36,9 @@ public class WebPageController extends BaseController {
 
 	public void load(String url) {
 		log.debug("加载页面：" + url);
-		if (url.startsWith("http")) {
+		if (TextUtils.isBlank(url)) {
+			webEngine.load("http://www.baidu.com");
+		} else if (url.startsWith("http")) {
 			webEngine.load(url);
 		} else {
 			webEngine.load("file:///" + url);

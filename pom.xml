@@ -190,6 +190,13 @@
 			<version>0.7-M3</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/jnetpcap/jnetpcap -->
+		<dependency>
+			<groupId>jnetpcap</groupId>
+			<artifactId>jnetpcap</artifactId>
+			<version>1.4.r1425-1f</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -198,6 +205,9 @@
 		</dependency>
 	</dependencies>
 	<repositories>
-
+		<repository>
+			<id>Clojars</id>
+			<url>http://clojars.org/repo/</url>
+		</repository>
 	</repositories>
 </project>
