@@ -27,6 +27,8 @@ public class JNetPcapTest {
 //			});
 		});
 		
+		// http://blog.sina.com.cn/s/blog_40d608bb01010nt3.html
+		
 //		Pcap.openLive(arg0, arg1, arg2, arg3, arg4)
 
 		System.out.println(arg1);
