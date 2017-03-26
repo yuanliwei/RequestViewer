@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jnetpcap.Pcap;
+import org.jnetpcap.PcapAddr;
 import org.jnetpcap.PcapIf;
+import org.jnetpcap.PcapSockAddr;
+import org.jnetpcap.winpcap.WinPcap;
 import org.junit.Test;
 
 public class JNetPcapTest {
@@ -17,22 +20,39 @@ public class JNetPcapTest {
 		// 获取网卡列表
 		Pcap.findAllDevs(arg0, arg1);
 
-		arg0.forEach(action -> {
-			System.out.println(action.getName());
-			System.out.println(action);
-			System.out.println(action.getDescription());
+		String deviceName = null;
+		for (PcapIf pcapIf : arg0) {
+			System.out.println(pcapIf.getName());
+			System.out.println(pcapIf);
+			System.out.println(pcapIf.getDescription());
 //			action.
-//			action.getAddresses().forEach(a1 -> {
-//				System.out.println(a1.getAddr().toString());
-//			});
-		});
-		
+			List<PcapAddr> addrs = pcapIf.getAddresses();
+			for (PcapAddr paddr : addrs) {
+				PcapSockAddr addr = paddr.getAddr();
+				System.out.println("addr family : "+addr.getFamily());
+				System.out.println("addr family4 : "+PcapSockAddr.AF_INET);
+				System.out.println("addr family6 : "+PcapSockAddr.AF_INET6);
+				if (addr.getFamily()==PcapSockAddr.AF_INET) {
+					deviceName = pcapIf.getName();
+				}				
+			}
+		}
 		// http://blog.sina.com.cn/s/blog_40d608bb01010nt3.html
 		
 		
+		// 打开链接
 //		Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf)
+		int snaplen;//每次捕捉的数据量
+		int flags;  // 捕捉方式
+		int timeout;// 超时
+		StringBuilder errbuf;// 错误信息缓冲 
+//		Pcap pcap = Pcap.openLive(deviceName, snaplen, flags, timeout, errbuf);
 //		Pcap.openLive(arg0, arg1, arg2, arg3, arg4)
 
+		// 开始监听
+//		pcap.loop(int cnt, JPacketHandler<T> handler, T user)
 		System.out.println(arg1);
+		
+		System.out.println(WinPcap.isSupported());
 	}
 }
