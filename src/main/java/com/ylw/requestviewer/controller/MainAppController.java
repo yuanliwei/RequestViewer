@@ -47,7 +47,7 @@ public class MainAppController extends BaseController {
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
-		openTab("RequestView");
+//		openTab("RequestView");
 		openTab("NetCaptureView");
 	}
 

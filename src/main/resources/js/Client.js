@@ -1,0 +1,3 @@
+function getClient(){
+	return jsObj;
+}

@@ -15,8 +15,8 @@
 				<Menu mnemonicParsing="false" text="File">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#onAddTab" text="addTab" />
-						<MenuItem mnemonicParsing="false" onAction="#addNewTab" text="百度" userData="RequestView"/>
-						<MenuItem mnemonicParsing="false" onAction="#addNewTab" text="果壳" userData="NetCaptureView"/>
+						<MenuItem mnemonicParsing="false" onAction="#addNewTab" text="接口测试" userData="RequestView"/>
+						<MenuItem mnemonicParsing="false" onAction="#addNewTab" text="抓包工具" userData="NetCaptureView"/>
 						<MenuItem mnemonicParsing="false" onAction="#onOpenFile" text="打开文件" />
 						<MenuItem mnemonicParsing="false" onAction="#onOpenUrl" text="百度" userData="http://www.baidu.com" />
 						<MenuItem mnemonicParsing="false" onAction="#onOpenUrl" text="果壳" userData="http://www.guokr.com/" />
