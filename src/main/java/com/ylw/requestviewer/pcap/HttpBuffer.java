@@ -47,11 +47,13 @@ public class HttpBuffer {
 		// System.out.println("host:" + host);
 		// System.out.println("ContentType:" + contentType);
 
-		if (http.hasContent() || contentType == null || contentType.startsWith("text")
-				|| contentType.startsWith("application/json")) {
+		if (contentType == null || contentType.startsWith("text") || contentType.startsWith("application/json")) {
 			handleData = true;
 		} else {
 			handleData = false;
+		}
+		if (!isResponse && http.hasContent()) {
+			handleData = true;
 		}
 	}
 

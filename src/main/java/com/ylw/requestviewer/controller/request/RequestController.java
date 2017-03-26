@@ -1,4 +1,4 @@
-package com.ylw.requestviewer.view;
+package com.ylw.requestviewer.controller.request;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,9 +10,9 @@ import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-public class WebPageController extends BaseController {
+public class RequestController extends BaseController {
 
-	private static Log log = LogFactory.getLog(WebPageController.class);
+	private static Log log = LogFactory.getLog(RequestController.class);
 
 	@FXML
 	WebView webView;

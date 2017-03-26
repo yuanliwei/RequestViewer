@@ -7,16 +7,12 @@ import org.apache.commons.logging.LogFactory;
 
 import com.ylw.common.utils.PropUtils;
 import com.ylw.common.utils.Res;
-import com.ylw.requestviewer.view.MainAppController;
-import com.ylw.requestviewer.view.MainViewController;
-import com.ylw.requestviewer.view.WebPageController;
+import com.ylw.requestviewer.controller.MainAppController;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -24,7 +20,6 @@ public class MainApp extends Application {
 	private static Log log = LogFactory.getLog(MainApp.class);
 
 	private BorderPane root;
-	public WebPageController webPageController;
 	public MainAppController mainAppController;
 	public Stage primaryStage;
 
@@ -55,21 +50,23 @@ public class MainApp extends Application {
 
 	private void initCenter() {
 //		FXMLLoader loader = Res.getFXMLLoader("MainView.fxml");
-		FXMLLoader loader = Res.getFXMLLoader("WebPageView.fxml");
-		try {
-			WebView center = loader.load();
-			webPageController = loader.getController();
-			mainAppController.setCenter(center);
-			mainAppController.stackPane.getChildren().add(center);
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-		}
+//		FXMLLoader loader = Res.getFXMLLoader("WebPageView.fxml");
+//		FXMLLoader loader = Res.getFXMLLoader("MainTabPane.fxml");
+//		try {
+//			TabPane center = loader.load();
+//			webPageController = loader.getController();
+//			mainAppTabController = loader.getController();
+//			mainAppController.borderPane.setCenter(center);
+//			mainAppController.stackPane.getChildren().add(center);
+//		} catch (IOException e) {
+//			log.error(e.getMessage(), e);
+//		}
 	}
 
 	private void initController() {
 		mainAppController.setMainApp(this);
 //		webPageController.setMainApp(this);
-		webPageController.load(PropUtils.get("sel_html_path"));
+//		webPageController.load(PropUtils.get("sel_html_path"));
 	}
 
 	@Override

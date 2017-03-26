@@ -46,13 +46,14 @@ public abstract class HttpHandler<T> implements PcapPacketHandler<T> {
 							HttpBuffer buffer2 = bufferMap.remove(buffer.getFriendKey());
 							if (buffer2 == null) {
 								nextHttpPacket(buffer.getHeader(), buffer.getContent(), user);
-							}
-							if (buffer.isResponse()) {
-								nextHttpPacket(buffer2.getHeader(), buffer2.getContent(), user);
-								nextHttpPacket(buffer.getHeader(), buffer.getContent(), user);
 							} else {
-								nextHttpPacket(buffer.getHeader(), buffer.getContent(), user);
-								nextHttpPacket(buffer2.getHeader(), buffer2.getContent(), user);
+								if (buffer.isResponse()) {
+									nextHttpPacket(buffer2.getHeader(), buffer2.getContent(), user);
+									nextHttpPacket(buffer.getHeader(), buffer.getContent(), user);
+								} else {
+									nextHttpPacket(buffer.getHeader(), buffer.getContent(), user);
+									nextHttpPacket(buffer2.getHeader(), buffer2.getContent(), user);
+								}
 							}
 							bufferMap.remove(key);
 						}
