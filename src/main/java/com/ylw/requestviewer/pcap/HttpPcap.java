@@ -1,21 +1,18 @@
-package jnetpcap;
+package com.ylw.requestviewer.pcap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
-import org.junit.Test;
 
-import com.ylw.requestviewer.pcap.HttpBuffer;
-import com.ylw.requestviewer.pcap.HttpHandler;
+public class HttpPcap {
+	Pcap pcap;
 
-public class TTTHttp2 {
-
-	@Test
-	public void main() {
+	public List<PcapIf> findAllDevs() {
 		List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with
-														// NICs
+		// NICs
 		StringBuilder errbuf = new StringBuilder(); // For any error msgs
 
 		/***************************************************************************
@@ -24,30 +21,23 @@ public class TTTHttp2 {
 		int r = Pcap.findAllDevs(alldevs, errbuf);
 		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {
 			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());
-			return;
+			return null;
 		}
 
 		System.out.println("Network devices found:");
+		return alldevs;
+	}
 
-		int i = 0;
-		for (PcapIf device : alldevs) {
-			String description = (device.getDescription() != null) ? device.getDescription()
-					: "No description available";
-			System.out.printf("#%d: %s [%s]\n", i++, device.getName(), description);
-		}
-
-		PcapIf device = alldevs.get(0); // We know we have atleast 1 device
-		System.out.printf("\nChoosing '%s' on your behalf:\n",
-				(device.getDescription() != null) ? device.getDescription() : device.getName());
-
+	public void startCapture(String devName) throws IOException {
 		int snaplen = 64 * 1024; // Capture all packets, no trucation
 		int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
 		int timeout = 10 * 1000; // 10 seconds in millis
-		Pcap pcap = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
+		StringBuilder errbuf = new StringBuilder();
+		Pcap pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
 
 		if (pcap == null) {
 			System.err.printf("Error while opening device for capture: " + errbuf.toString());
-			return;
+			throw new IOException("Error while opening device for capture: " + errbuf.toString());
 		}
 
 		HttpHandler<String> httpHandler = new HttpHandler<String>() {
@@ -58,7 +48,15 @@ public class TTTHttp2 {
 		};
 
 		pcap.loop(-1, httpHandler, "jNetPcap rocks!");
+	}
 
-		pcap.close();
+	public void stopCapture() {
+		if (pcap != null) {
+			pcap.close();
+		}
+	}
+
+	public void setCaptureListener() {
+
 	}
 }
