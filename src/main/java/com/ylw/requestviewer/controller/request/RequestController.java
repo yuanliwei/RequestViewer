@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.util.TextUtils;
 
+import com.ylw.common.utils.FileUtil;
 import com.ylw.requestviewer.controller.BaseController;
 
 import javafx.concurrent.Worker.State;
@@ -24,7 +25,8 @@ public class RequestController extends BaseController {
 	@Override
 	protected void initialize() {
 		webEngine = webView.getEngine();
-		webEngine.load("http://www.baidu.com");
+//		webEngine.load("http://www.baidu.com");
+		load(FileUtil.getResUrl("html/RequestView.html").toString());
 
 		RequestJSInterface jsObj = new RequestJSInterface();
 		
@@ -51,7 +53,7 @@ public class RequestController extends BaseController {
 		log.debug("加载页面：" + url);
 		if (TextUtils.isBlank(url)) {
 			webEngine.load("http://www.baidu.com");
-		} else if (url.startsWith("http")) {
+		} else if (url.startsWith("http") || url.startsWith("file:")) {
 			webEngine.load(url);
 		} else {
 			webEngine.load("file:///" + url);

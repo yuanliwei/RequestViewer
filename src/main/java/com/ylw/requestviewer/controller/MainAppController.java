@@ -47,8 +47,8 @@ public class MainAppController extends BaseController {
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
-//		openTab("RequestView");
-		openTab("NetCaptureView");
+		openTab("RequestView");
+//		openTab("NetCaptureView");
 	}
 
 	@Override

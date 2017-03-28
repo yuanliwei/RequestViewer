@@ -13,11 +13,12 @@ import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ylw.requestviewer.MainApp;
+import com.ylw.requestviewer.controller.BaseJSInterface;
 
 import javafx.application.Platform;
 import netscape.javascript.JSObject;
 
-public class RequestJSInterface {
+public class RequestJSInterface extends BaseJSInterface{
 	private static Log log = LogFactory.getLog(RequestJSInterface.class);
 
 	public RequestJSInterface() {
