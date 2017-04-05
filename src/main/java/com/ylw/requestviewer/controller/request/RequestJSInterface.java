@@ -60,7 +60,6 @@ public class RequestJSInterface extends BaseJSInterface {
 		JSONObject headers = new JSONObject();
 		// 遍历所有的响应头字段
 		for (String key : map.keySet()) {
-			System.out.println(key + "--->" + map.get(key));
 			headers.put(key, map.get(key));
 		}
 		// 定义BufferedReader输入流来读取URL的响应
@@ -102,7 +101,6 @@ public class RequestJSInterface extends BaseJSInterface {
 		// 遍历所有的响应头字段
 		JSONObject headers = new JSONObject();
 		for (String key : map.keySet()) {
-			System.out.println(key + "--->" + map.get(key));
 			headers.put(key, map.get(key));
 		}
 		// 定义BufferedReader输入流来读取URL的响应

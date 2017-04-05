@@ -39,7 +39,7 @@ function testGet(){
 function testPost(){
 	HttpClient.POST({
 		url: 'http://www.baidu.com',
-		headers:[{key:'key1',value:'v1'},{key:'key2',value:'v2'},{key:'key3',value:'v3'}],
+		headers:[{key:'key1',value:'v1'},{key:'key1',value:'v2'},{key:'key3',value:'v3'}],
 		params: 'name=yyy&age=13&height=165',
 	    onSuccess: function(headers, body) {
 	        console.log(body);
