@@ -18,7 +18,7 @@ import com.ylw.requestviewer.controller.BaseJSInterface;
 import javafx.application.Platform;
 import netscape.javascript.JSObject;
 
-public class RequestJSInterface extends BaseJSInterface{
+public class RequestJSInterface extends BaseJSInterface {
 	private static Log log = LogFactory.getLog(RequestJSInterface.class);
 
 	public RequestJSInterface() {
@@ -50,6 +50,9 @@ public class RequestJSInterface extends BaseJSInterface{
 		connection.setRequestProperty("accept", "*/*");
 		connection.setRequestProperty("connection", "Keep-Alive");
 		connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
+
+		addHeaders(params, connection);
+		
 		// 建立实际的连接
 		connection.connect();
 		// 获取所有响应头字段
@@ -57,7 +60,6 @@ public class RequestJSInterface extends BaseJSInterface{
 		JSONObject headers = new JSONObject();
 		// 遍历所有的响应头字段
 		for (String key : map.keySet()) {
-			System.out.println(key + "--->" + map.get(key));
 			headers.put(key, map.get(key));
 		}
 		// 定义BufferedReader输入流来读取URL的响应
@@ -83,6 +85,9 @@ public class RequestJSInterface extends BaseJSInterface{
 		connection.setRequestProperty("accept", "*/*");
 		connection.setRequestProperty("connection", "Keep-Alive");
 		connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
+
+		addHeaders(params, connection);
+
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		// 获取URLConnection对象对应的输出流
@@ -96,7 +101,6 @@ public class RequestJSInterface extends BaseJSInterface{
 		// 遍历所有的响应头字段
 		JSONObject headers = new JSONObject();
 		for (String key : map.keySet()) {
-			System.out.println(key + "--->" + map.get(key));
 			headers.put(key, map.get(key));
 		}
 		// 定义BufferedReader输入流来读取URL的响应
@@ -111,5 +115,26 @@ public class RequestJSInterface extends BaseJSInterface{
 		// params.call("onError",
 		// "2CCCCCCCCCCCCCCCCCCCCCCCCGggggggggggggggggg");
 
+	}
+
+	private void addHeaders(JSObject params, URLConnection connection) {
+		Object member = params.getMember("headers");
+		if (member instanceof JSObject) {
+			JSObject headerParams = (JSObject) member;
+			for (int i = 0; true; i++) {
+				Object slot = headerParams.getSlot(i);
+				if (slot instanceof JSObject) {
+					String key = (String) ((JSObject) slot).getMember("key");
+					String value = (String) ((JSObject) slot).getMember("value");
+					if ("undefined".equals(key) || "undefined".equals(value)) {
+						continue;
+					} else {
+						connection.setRequestProperty(key, value);
+					}
+				} else {
+					break;
+				}
+			}
+		}
 	}
 }

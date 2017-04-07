@@ -33,7 +33,7 @@ public class HttpPcap {
 		int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
 		int timeout = 10 * 1000; // 10 seconds in millis
 		StringBuilder errbuf = new StringBuilder();
-		Pcap pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
+		pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
 
 		if (pcap == null) {
 			System.err.printf("Error while opening device for capture: " + errbuf.toString());
@@ -43,11 +43,18 @@ public class HttpPcap {
 		HttpHandler<String> httpHandler = new HttpHandler<String>() {
 			@Override
 			protected void nextHttpPacket(String header, String content, String user) {
-				System.out.println(header + content);
+				// System.out.println(header + content);
+				if (captureListener != null) {
+					captureListener.onHttpPacket(header, content);
+				}
 			}
 		};
 
-		pcap.loop(-1, httpHandler, "jNetPcap rocks!");
+		new Thread() {
+			public void run() {
+				pcap.loop(-1, httpHandler, "jNetPcap rocks!");
+			};
+		}.start();
 	}
 
 	public void stopCapture() {
@@ -56,7 +63,13 @@ public class HttpPcap {
 		}
 	}
 
-	public void setCaptureListener() {
+	public interface ICaptureListener {
+		void onHttpPacket(String header, String content);
+	}
 
+	ICaptureListener captureListener;
+
+	public void setCaptureListener(ICaptureListener captureListener) {
+		this.captureListener = captureListener;
 	}
 }

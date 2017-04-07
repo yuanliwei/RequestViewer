@@ -6,18 +6,17 @@
 <title>NetCapture</title>
 <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bodymovin/4.5.8/bodymovin.js"></script>
-<link href="https://cdn.bootcss.com/tether/1.4.0/css/tether.min.css"
-	rel="stylesheet">
+<link href="https://cdn.bootcss.com/tether/1.4.0/css/tether.min.css" rel="stylesheet">
 <script src="https://cdn.bootcss.com/tether/1.4.0/js/tether.min.js"></script>
-<link
-	href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+<link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 <script src="https://cdn.wilddog.com/sdk/js/2.3.10/wilddog.js"></script>
+<script src="https://cdn.rawgit.com/yuanliwei/fast-list/master/js/fast-list.js" charset="utf-8"></script>
+<script src="../js/Client.js" charset="utf-8"></script>
+<script src="../js/NetCapture.js" charset="utf-8"></script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="position: inherit;">
 		<div class="row">
 			<div id='container'></div>
 		</div>
@@ -34,6 +33,41 @@
 				<!-- /input-group -->
 			</div>
 		</div>
+		<div class="row mt-4">
+			<div class="col-12">
+				<button type="button" name="button" class="btn btn-primary" onclick="testGetDevs()">testGetDevs</button>
+				<button type="button" name="button" class="btn btn-primary" onclick="testRegisterCaptureCallback()">testRegisterCaptureCallback</button>
+				<button type="button" name="button" class="btn btn-primary" onclick="testStartCapture()">testStartCapture</button>
+				<button type="button" name="button" class="btn btn-primary" onclick="testStopCapture()">testStopCapture</button>
+			</div>
+		</div>
+		<div class="row mt-4">
+			<div class="col-12">
+				<pre id="response"></pre>
+			</div>
+		</div>
+		<!-- <div class="row mt-4">
+			<div class="col-12"> -->
+				<div id="root" class="root">
+					<div class="item">
+						<div class="container-fluid mt-1">
+							<div class="row">
+								<div class="col-3 bg-warn text-center align-middle"><br>
+									<img width="30" height="30" class="rounded-circle d-block mx-auto" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2677950915,1586381455&fm=23&gp=0.jpg" alt="">
+									<span class="text-danger">W</span><span class="wordNo bg-danger text-white">10</span>
+								</div>
+								<div class="descBg col-7 bg-success">
+									<span class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </span>
+								</div>
+								<div class="wrongNum col-2 bg-inverse text-success">
+									Lorem ...
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- </div>
+		</div> -->
 	</div>
 </body>
 </html>

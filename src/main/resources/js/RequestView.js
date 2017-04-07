@@ -39,6 +39,7 @@ function testGet(){
 function testPost(){
 	HttpClient.POST({
 		url: 'http://www.baidu.com',
+		headers:[{key:'key1',value:'v1'},{key:'key1',value:'v2'},{key:'key3',value:'v3'}],
 		params: 'name=yyy&age=13&height=165',
 	    onSuccess: function(headers, body) {
 	        console.log(body);
@@ -46,6 +47,49 @@ function testPost(){
 	    onError: function(msg) {
 	    	console.log(msg);
 	    }
+	});
+}
+
+function testLogin() {
+	HttpClient.POST({
+		url: 'http://sso.host.cn/v1/tickets',
+		headers:[{key:'X-Requested-With', value:'android'}],
+		params: 'username=up0174&password=123456',
+		onSuccess: function (headers, body) {
+			console.log('login - '+body);
+			genST();
+		},
+		onError: function (msg) {
+			console.log('login error - ' + msg);
+		}
+	});
+}
+
+function genST() {
+	HttpClient.POST({
+		url: 'http://sso.host.cn/v1/serviceTicket',
+		headers:[{key:'X-Requested-With', value:'android'}],
+		params: 'service='+encodeURIComponent('http://school.host.cn/client/course/list-of-student?status=1'),
+		onSuccess: function (headers, body) {
+			console.log('get st - ' + body);
+			getCourseList(JSON.parse(body).data.serverTicket);
+		},
+		onError: function (msg) {
+			console.log("get st error - " + msg);
+		}
+	});
+}
+
+function getCourseList(ticket) {
+	HttpClient.GET({
+		url: 'http://school.host.cn/client/course/list-of-student?status=1&ticket='+ticket,
+		headers:[{key:'X-Requested-With', value:'android'}],
+		onSuccess: function (headers, body) {
+			console.log("getCourseList - " + body);
+		},
+		onError: function (msg) {
+			console.log("getCourseList error - " + msg);
+		}
 	});
 }
 
