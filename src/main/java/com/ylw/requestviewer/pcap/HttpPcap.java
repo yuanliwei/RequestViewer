@@ -4,13 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
 public class HttpPcap {
+
+	private static Log log = LogFactory.getLog(HttpPcap.class);
+
 	Pcap pcap;
 
 	public List<PcapIf> findAllDevs() {
+
 		List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with
 		// NICs
 		StringBuilder errbuf = new StringBuilder(); // For any error msgs
@@ -19,8 +25,8 @@ public class HttpPcap {
 		 * First get a list of devices on this system
 		 **************************************************************************/
 		int r = Pcap.findAllDevs(alldevs, errbuf);
-		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {
-			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());
+		if (r == Pcap.ERROR || alldevs.isEmpty()) {
+			log.error("Can't read list of devices, error is " + errbuf.toString());
 			return null;
 		}
 
@@ -36,7 +42,7 @@ public class HttpPcap {
 		pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
 
 		if (pcap == null) {
-			System.err.printf("Error while opening device for capture: " + errbuf.toString());
+			log.error("Error while opening device for capture: " + errbuf.toString());
 			throw new IOException("Error while opening device for capture: " + errbuf.toString());
 		}
 
@@ -52,7 +58,9 @@ public class HttpPcap {
 
 		new Thread() {
 			public void run() {
+				log.info("start capture.");
 				pcap.loop(-1, httpHandler, "jNetPcap rocks!");
+				log.info("end capture.");
 			};
 		}.start();
 	}
@@ -60,6 +68,7 @@ public class HttpPcap {
 	public void stopCapture() {
 		if (pcap != null) {
 			pcap.close();
+			pcap = null;
 		}
 	}
 
