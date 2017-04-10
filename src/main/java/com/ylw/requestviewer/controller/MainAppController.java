@@ -103,6 +103,7 @@ public class MainAppController extends BaseController {
 			log.debug("selectFile : " + openFilePath);
 			// mainApp.webPageController.load(openFilePath);
 			PropUtils.put("sel_html_path", openFilePath);
+			openTab("NewWebView");
 		}
 	}
 
@@ -146,6 +147,16 @@ public class MainAppController extends BaseController {
 				tab.setContent(loader.load());
 				tab.setText(uData);
 				tabPane.getTabs().add(tab);
+				break;
+			case "NewWebView":
+				loader = Res.getFXMLLoader("NewWebView.fxml");
+				tab = new Tab();
+				tab.setContent(loader.load());
+				tab.setText(uData);
+				tabPane.getTabs().add(tab);
+				NewWebViewController newWebViewController = loader.getController();
+				String url = PropUtils.get("sel_html_path");
+				newWebViewController.load(url);
 				break;
 
 			default:

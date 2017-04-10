@@ -7,7 +7,10 @@ import org.apache.commons.logging.LogFactory;
 
 import com.ylw.common.utils.PropUtils;
 import com.ylw.common.utils.Res;
+import com.ylw.common.utils.TaskUtils;
+import com.ylw.common.utils.event.EventUtil;
 import com.ylw.requestviewer.controller.MainAppController;
+import com.ylw.requestviewer.model.StopAppEvent;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -72,6 +75,8 @@ public class MainApp extends Application {
 	@Override
 	public void stop() throws Exception {
 		PropUtils.store();
+		EventUtil.post(new StopAppEvent());
+		TaskUtils.shutdown();
 //		webPageController.stop();
 		super.stop();
 	}

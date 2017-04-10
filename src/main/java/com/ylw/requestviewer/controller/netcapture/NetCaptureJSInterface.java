@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+import com.ylw.common.utils.event.EventUtil;
+import com.ylw.requestviewer.model.StopAppEvent;
 import com.ylw.requestviewer.pcap.HttpPcap;
 
 import javafx.application.Platform;
@@ -22,6 +22,7 @@ public class NetCaptureJSInterface {
 
 	public NetCaptureJSInterface() {
 		pcap = new HttpPcap();
+		EventUtil.register(this);
 	}
 
 	public void start(String url, int deep) {
@@ -90,4 +91,10 @@ public class NetCaptureJSInterface {
 			}
 		});
 	}
+	
+	public void onEvent(StopAppEvent e) {
+		stopCapture();
+	}
 }
+
+

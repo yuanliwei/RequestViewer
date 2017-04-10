@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.WebView?>
+
+<!-- TODO Add Nodes -->
+<WebView xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.ylw.requestviewer.controller.NewWebViewController"
+	fx:id="webView" />
+ 
