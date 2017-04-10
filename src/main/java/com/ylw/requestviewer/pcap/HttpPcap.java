@@ -7,6 +7,8 @@ import java.util.List;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
+import com.ylw.common.utils.TaskUtils;
+
 public class HttpPcap {
 	Pcap pcap;
 
@@ -50,11 +52,13 @@ public class HttpPcap {
 			}
 		};
 
-		new Thread() {
+		TaskUtils.getSingleExcutor().execute(new Runnable() {
+			
+			@Override
 			public void run() {
 				pcap.loop(-1, httpHandler, "jNetPcap rocks!");
-			};
-		}.start();
+			}
+		});
 	}
 
 	public void stopCapture() {

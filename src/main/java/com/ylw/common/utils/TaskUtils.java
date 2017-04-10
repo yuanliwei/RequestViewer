@@ -1,5 +1,8 @@
 package com.ylw.common.utils;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,35 +12,43 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class TaskUtils {
-    public static Executor getExcutor() {
-        if (executorService == null) {
-            executorService = new ThreadPoolExecutor(kDefaultThreadPoolSize, maxThreadPoolSize, kKeepAliveTime, kTimeUnit, queue,
-                    handler);
-        }
-        return executorService;
-    }
+	private static List<ExecutorService> executorServices = new LinkedList<>();
 
-    public static Executor getSingleExcutor() {
-        if (singleExecutorService == null) {
-            singleExecutorService = Executors.newSingleThreadExecutor();
-        }
-        return singleExecutorService;
-    }
+	public static Executor getExcutor() {
+		if (executorService == null) {
+			executorService = new ThreadPoolExecutor(kDefaultThreadPoolSize, maxThreadPoolSize, kKeepAliveTime,
+					kTimeUnit, queue, handler);
+			executorServices.add(executorService);
+		}
+		return executorService;
+	}
 
-    private static int kDefaultThreadPoolSize = 4;
-    private static int maxThreadPoolSize = 40;
-    private static int kKeepAliveTime = 30;
-    private static TimeUnit kTimeUnit = TimeUnit.SECONDS;
+	public static Executor getSingleExcutor() {
+		ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
+		executorServices.add(singleExecutorService);
+		return singleExecutorService;
+	}
 
-    private final static LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
+	private static int kDefaultThreadPoolSize = 4;
+	private static int maxThreadPoolSize = 40;
+	private static int kKeepAliveTime = 30;
+	private static TimeUnit kTimeUnit = TimeUnit.SECONDS;
 
-    static RejectedExecutionHandler handler = new RejectedExecutionHandler() {
-        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-            queue.add(r);
-        }
-    };
+	private final static LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
 
-    private static ExecutorService executorService;
-    private static ExecutorService singleExecutorService;
+	static RejectedExecutionHandler handler = new RejectedExecutionHandler() {
+		public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+			queue.add(r);
+		}
+	};
+
+	private static ExecutorService executorService;
+
+	public static void shutdown() {
+		executorServices.forEach(action -> {
+//			action.shutdown();
+			action.shutdownNow();
+		});
+	}
 
 }
