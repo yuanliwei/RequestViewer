@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.util.TextUtils;
 
-import com.ylw.common.utils.FileUtil;
+import com.ylw.common.utils.PropUtils;
 import com.ylw.requestviewer.controller.BaseController;
 
 import javafx.concurrent.Worker.State;
@@ -25,8 +25,8 @@ public class RequestController extends BaseController {
 	@Override
 	protected void initialize() {
 		webEngine = webView.getEngine();
-//		webEngine.load("http://www.baidu.com");
-		load(FileUtil.getResUrl("html/RequestView.html").toString());
+
+        load(PropUtils.get("html_RequestView"));
 
 		RequestJSInterface jsObj = new RequestJSInterface();
 		

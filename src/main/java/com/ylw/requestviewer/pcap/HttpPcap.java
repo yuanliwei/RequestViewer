@@ -4,76 +4,90 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
+import com.ylw.common.utils.NativeUtils;
 import com.ylw.common.utils.TaskUtils;
+import com.ylw.requestviewer.MainApp;
 
 public class HttpPcap {
-	Pcap pcap;
+    private static Log log = LogFactory.getLog(HttpPcap.class);
 
-	public List<PcapIf> findAllDevs() {
-		List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with
-		// NICs
-		StringBuilder errbuf = new StringBuilder(); // For any error msgs
+    static {
+        try {
+            NativeUtils.loadLibraryFromJar("/native/windows/x86_64/" + System.mapLibraryName("jnetpcap"));
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
-		/***************************************************************************
-		 * First get a list of devices on this system
-		 **************************************************************************/
-		int r = Pcap.findAllDevs(alldevs, errbuf);
-		if (r == Pcap.ERROR || alldevs.isEmpty()) {
-			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());
-			return null;
-		}
+    Pcap pcap;
 
-		System.out.println("Network devices found:");
-		return alldevs;
-	}
+    public List<PcapIf> findAllDevs() {
+        List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with
+        // NICs
+        StringBuilder errbuf = new StringBuilder(); // For any error msgs
 
-	public void startCapture(String devName) throws IOException {
-		int snaplen = 64 * 1024; // Capture all packets, no trucation
-		int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
-		int timeout = 10 * 1000; // 10 seconds in millis
-		StringBuilder errbuf = new StringBuilder();
-		pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
+        /***************************************************************************
+         * First get a list of devices on this system
+         **************************************************************************/
+        int r = Pcap.findAllDevs(alldevs, errbuf);
+        if (r == Pcap.ERROR || alldevs.isEmpty()) {
+            System.err.printf("Can't read list of devices, error is %s", errbuf.toString());
+            return null;
+        }
 
-		if (pcap == null) {
-			System.err.printf("Error while opening device for capture: " + errbuf.toString());
-			throw new IOException("Error while opening device for capture: " + errbuf.toString());
-		}
+        System.out.println("Network devices found:");
+        return alldevs;
+    }
 
-		HttpHandler<String> httpHandler = new HttpHandler<String>() {
-			@Override
-			protected void nextHttpPacket(String header, String content, String user) {
-				// System.out.println(header + content);
-				if (captureListener != null) {
-					captureListener.onHttpPacket(header, content);
-				}
-			}
-		};
+    public void startCapture(String devName) throws IOException {
+        int snaplen = 64 * 1024; // Capture all packets, no trucation
+        int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
+        int timeout = 10 * 1000; // 10 seconds in millis
+        StringBuilder errbuf = new StringBuilder();
+        pcap = Pcap.openLive(devName, snaplen, flags, timeout, errbuf);
 
-		TaskUtils.getSingleExcutor().execute(new Runnable() {
-			
-			@Override
-			public void run() {
-				pcap.loop(-1, httpHandler, "jNetPcap rocks!");
-			}
-		});
-	}
+        if (pcap == null) {
+            System.err.printf("Error while opening device for capture: " + errbuf.toString());
+            throw new IOException("Error while opening device for capture: " + errbuf.toString());
+        }
 
-	public void stopCapture() {
-		if (pcap != null) {
-			pcap.close();
-		}
-	}
+        HttpHandler<String> httpHandler = new HttpHandler<String>() {
+            @Override
+            protected void nextHttpPacket(String header, String content, String user) {
+                // System.out.println(header + content);
+                if (captureListener != null) {
+                    captureListener.onHttpPacket(header, content);
+                }
+            }
+        };
 
-	public interface ICaptureListener {
-		void onHttpPacket(String header, String content);
-	}
+        TaskUtils.getSingleExcutor().execute(new Runnable() {
 
-	ICaptureListener captureListener;
+            @Override
+            public void run() {
+                pcap.loop(-1, httpHandler, "jNetPcap rocks!");
+            }
+        });
+    }
 
-	public void setCaptureListener(ICaptureListener captureListener) {
-		this.captureListener = captureListener;
-	}
+    public void stopCapture() {
+        if (pcap != null) {
+            pcap.close();
+        }
+    }
+
+    public interface ICaptureListener {
+        void onHttpPacket(String header, String content);
+    }
+
+    ICaptureListener captureListener;
+
+    public void setCaptureListener(ICaptureListener captureListener) {
+        this.captureListener = captureListener;
+    }
 }

@@ -324,7 +324,7 @@ public class IpReassemblyExample implements PcapPacketHandler<Object> {
 		 * First get a list of devices on this system
 		 **************************************************************************/
 		int r = Pcap.findAllDevs(alldevs, errbuf);
-		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {
+		if (r == Pcap.ERROR || alldevs.isEmpty()) {
 			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());
 			return;
 		}
