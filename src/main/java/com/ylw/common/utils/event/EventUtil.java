@@ -39,7 +39,7 @@ public class EventUtil {
         unregister(obj);
         Method[] methods = obj.getClass().getDeclaredMethods();
         for (Method method : methods) {
-            log.debug(method.getName());
+//            log.debug(method.getName());
             if (method.getName().startsWith("onEvent")) {
                 Class<?> pType = method.getParameterTypes()[0];
                 List<InvOkModel> list = map.get(pType.getName());

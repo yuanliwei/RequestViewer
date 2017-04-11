@@ -1,11 +1,13 @@
 var list = null;
 
 var NetCapture = {
+		devArr: [],
+		devNo: 0,
 		getDevices: function(){
 			return getClient().findAllDevs();
 		},
-		start: function(devName){
-			return getClient().startCapture(devName);
+		start: function(){
+			return getClient().startCapture(this.devArr[this.devNo].name);
 		},
 		stop: function(){
 			return getClient().stopCapture();
@@ -26,7 +28,6 @@ function registerCaptureCallback(){
 	console.log('register capture callback.');
 }
 
-var devName;
 function getDevs() {
 	var devs = NetCapture.getDevices();
 	var devArr = JSON.parse(devs);
@@ -35,8 +36,9 @@ function getDevs() {
 }
 
 function startCapture() {
-	var result = NetCapture.start(devName);
+	var result = NetCapture.start();
 	console.log('start capture : ' + result);
+	registerCaptureCallback();
 }
 
 function stopCapture() {
@@ -54,6 +56,8 @@ function initList() {
 				request: $(view.find('.request')),
 				response: $(view.find('.response')),
 				url: $(view.find('.url')),
+				arrow: $(view.find('.arrow')),
+				fa: $(view.find('.fa')),
 				captureContent: $(view.find('.capture-content')),
 				item: $(view.find('.row'))
 			}
@@ -64,11 +68,14 @@ function initList() {
 			holder.request.text(data.request);
 			holder.response.text(data.response);
 			holder.url.text(data.url);
-			holder.url.click(function (view) {
+			holder.arrow.click(function (view) {
+				holder.fa.removeClass("fa-chevron-right fa-chevron-down");
 				if (holder.captureContent.hasClass("d-none")) {
 					holder.captureContent.removeClass("d-none");
+					holder.fa.addClass("fa-chevron-down");
 				} else {
 					holder.captureContent.addClass("d-none");
+					holder.fa.addClass("fa-chevron-right");
 				}
 			});
 		}
@@ -81,7 +88,9 @@ var HttpRequestHandle = {
 	handle: function (header, content, callback) {
 		if (header.startsWith('POST ')
 		|| header.startsWith('GET ')
-		|| header.startsWith('OPTION ')) {
+		|| header.startsWith('DELETE ')
+		|| header.startsWith('PUT ')
+		|| header.startsWith('OPTIONS ')) {
 			this.request = header + content;
 			this.url = this.getUrl(header);
 		}
@@ -115,6 +124,45 @@ var HttpRequestHandle = {
 	}
 };
 
+function initDropdownMenus() {
+	var devBtn = $("#dev-name");
+	var devDropdown = $("#dev-name-dropdown");
+	var netDeviceName = Client.loadData("netDeviceName");
+	var devs = NetCapture.getDevices();
+	var devArr = JSON.parse(devs);
+	NetCapture.devArr = devArr;
+	var found = false;
+	for (var i = 0; i < devArr.length; i++) {
+		var dev = devArr[i];
+		if (dev.name == netDeviceName) {
+			found = true;
+		}
+		devDropdown.append('<a class="dropdown-item" href="#" onclick="selNetDevice('+i+')">' + dev.name + '</a>');
+	}
+	if (!found) {
+		netDeviceName = devArr[0].name;
+		Client.saveData("netDeviceName", netDeviceName);
+		NetCapture.devNo = 0;
+	}
+	devBtn.text(netDeviceName);
+
+	$("#url-filter").change(function (view) {
+		var value = view.target.value;
+		// list.datas
+	});
+}
+
+function selNetDevice(devNo) {
+	var devBtn = $("#dev-name");
+	devBtn.text(NetCapture.devArr[devNo].name);
+	Client.saveData("netDeviceName", devNo);
+	NetCapture.devNo = devNo;
+}
+
 $(document).ready(function () {
 	initList();
+	// for (var i = 0; i < 300; i++) {
+	// 	list.append({url: 'url', request:'request', response: 'response'});
+	// }
+	setTimeout(initDropdownMenus, 300);
 });

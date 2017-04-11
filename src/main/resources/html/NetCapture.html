@@ -10,6 +10,8 @@
 <script src="https://cdn.bootcss.com/tether/1.4.0/js/tether.min.js"></script>
 <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+<!-- http://fontawesome.io/icons/ -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <script src="https://cdn.wilddog.com/sdk/js/2.3.10/wilddog.js"></script>
 <script src="https://cdn.bootcss.com/js-beautify/1.6.12/beautify.min.js"></script>
 <script src="https://cdn.rawgit.com/yuanliwei/fast-list/tag-170410/js/normal-list.js" charset="utf-8"></script>
@@ -17,52 +19,48 @@
 <script src="../js/NetCapture.js" charset="utf-8"></script>
 </head>
 <body>
-	<div class="container" style="position: inherit;">
-		<div class="row">
-			<div id='container'></div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="input-group">
-					<textarea type="text" id="ae-json" class="form-control"
-						placeholder="AE-JSON"></textarea>
-					<span class="input-group-btn">
-						<button id="ae-button" class="btn btn-default" type="button">Go!</button>
-					</span>
+	<div class="container">
+		<nav class="navbar sticky-top navbar-light bg-faded">
+			<div class="row mt-4">
+				<div id="nav-content" class="col-12 d-flex flex-row justify-content-between">
+					<button type="button" name="button" class="btn btn-primary mr-2" onclick="startCapture()">Start</button>
+					<button type="button" name="button" class="btn btn-primary mr-2" onclick="stopCapture()">Stop</button>
+					<!-- Example single danger button -->
+					<div class="btn-group">
+						<button id="dev-name" type="button" class="btn btn-primary dropdown-toggle mr-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							\Device\NPF_{07D01D13-00F7-4DAC-BE61-6AC4EB6FB1CB}
+						</button>
+						<div id="dev-name-dropdown" class="dropdown-menu">
+						</div>
+					</div>
+					<div class="input-group">
+						<input id="url-filter" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Filter">
+					</div>
 				</div>
-				<!-- /input-group -->
 			</div>
-		</div>
-		<div class="row mt-4">
-			<div class="col-12">
-				<button type="button" name="button" class="btn btn-primary" onclick="getDevs()">GetDevs</button>
-				<button type="button" name="button" class="btn btn-primary" onclick="registerCaptureCallback()">RegisterCaptureCallback</button>
-				<button type="button" name="button" class="btn btn-primary" onclick="startCapture()">StartCapture</button>
-				<button type="button" name="button" class="btn btn-primary" onclick="stopCapture()">StopCapture</button>
-			</div>
-		</div>
-		<div class="row mt-4">
-			<div class="col-12">
-				<pre id="response"></pre>
-			</div>
-		</div>
+		</nav>
 		<div id="list" class="row mt-4">
-			<div class="item col-12 mt-2 bg-info">
+			<div class="item col-12 mt-2">
 				<div class="row">
-					<div class="col-11 bg-primary url">
-						url:htttttttttttttttttttttttp
+					<div class="col-11">
+						<div class="row">
+							<div class="col-12 bg-primary text-white url" contenteditable="true">
+								url:htttttttttttttttttttttttp
+							</div>
+						</div>
+						<div class="row capture-content d-none">
+							<div class="col-12 bg-info">
+								<pre class="request" contenteditable="true"></pre>
+							</div>
+							<div class="col-12 bg-success">
+								<pre class="response" contenteditable="true"></pre>
+							</div>
+						</div>
 					</div>
-					<div class="col-1 text-right bg-info">
-						X
-					</div>
-				</div>
-				<div class="row capture-content d-none">
-					<div class="col-12 bg-warn">
-						<pre class="request" contenteditable="true"></pre>
-					</div>
-					<div class="col-12 bg-success">
-						<pre class="response" contenteditable="true"></pre>
+					<!-- d-inline -->
+					<div class="arrow form-check-label col-1 text-right bg-warning d-flex flex-row justify-content-center">
+						<!-- fa-chevron-down -->
+						<i class="fa fa-chevron-right align-self-center"></i>
 					</div>
 				</div>
 			</div>
