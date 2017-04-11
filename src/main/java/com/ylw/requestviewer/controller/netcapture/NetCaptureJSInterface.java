@@ -83,7 +83,7 @@ public class NetCaptureJSInterface extends BaseJSInterface {
 
             @Override
             public void onHttpPacket(String header, String content) {
-                 log.debug(header + content);
+//                 log.debug(header + content);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
