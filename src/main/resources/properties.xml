@@ -4,12 +4,9 @@
 	<comment>程序的配置文件</comment>
 	<entry key="234">afddsf</entry>
 	<entry key="shuzi">123</entry>
-	<entry key="db_path">jdbc:sqlite:src\main\resources\requestviewer.db</entry>
-	<entry key="html_NetCapture">E:\project\Git\yuanliwei.github.io\src\requestviewer\NetCapture.html</entry>
-	<entry key="html_RequestView">E:\project\Git\yuanliwei.github.io\src\requestviewer\RequestView.html</entry>
 
-<!-- 	<entry key="db_path">jdbc:sqlite:requestviewer.db</entry>
+	<entry key="db_path">jdbc:sqlite:requestviewer.db</entry>
 	<entry key="html_RequestView">https://yuanliwei.github.io/src/requestviewer/RequestView.html</entry>
 	<entry key="html_NetCapture">https://yuanliwei.github.io/src/requestviewer/NetCapture.html</entry>
- -->
+
 </properties>
