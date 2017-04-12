@@ -105,7 +105,7 @@ public class HttpBuffer {
                 bos.write(buffer, 0, length);
             } while (true);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return content;
         }
         return bos.toByteArray();
@@ -163,12 +163,10 @@ public class HttpBuffer {
     }
 
     private void assembledTcpData() {
-        // TODO Auto-generated method stub
         Collections.sort(tcps, new Comparator<SeqTcpData>() {
 
             @Override
             public int compare(SeqTcpData o1, SeqTcpData o2) {
-                // TODO Auto-generated method stub
                 if (o1 == null && o2 == null) {
                     return 0;
                 }
@@ -214,7 +212,6 @@ public class HttpBuffer {
     }
 
     public void setKeyAndFriendKey(String key, String friendKey) {
-        // TODO Auto-generated method stub
         this.key = key;
         this.friendKey = friendKey;
     }
