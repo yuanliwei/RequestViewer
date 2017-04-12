@@ -23,7 +23,6 @@ public class HttpBuffer {
     private static Log log = LogFactory.getLog(HttpBuffer.class);
 
     private ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    private long startTime;
     private boolean handleData;
     private boolean hasChunk;
     private boolean isResponse;
@@ -34,11 +33,12 @@ public class HttpBuffer {
     private long baseSeq;
 
     public HttpBuffer(Tcp tcp, Http http) {
-        startTime = System.currentTimeMillis();
         try {
-            bos.write(http.getPayload());
             header = new String(http.getHeader());
             checkData(http);
+            if (handleData) {
+                bos.write(http.getPayload());
+            }
             if (key == null) {
                 baseSeq = tcp.seq();
             }
@@ -169,11 +169,27 @@ public class HttpBuffer {
             @Override
             public int compare(SeqTcpData o1, SeqTcpData o2) {
                 // TODO Auto-generated method stub
-                return (int) (o1.seq - o2.seq);
+                if (o1 == null && o2 == null) {
+                    return 0;
+                }
+                if (o1 == null) {
+                    return -1;
+                }
+                if (o2 == null) {
+                    return 1;
+                }
+                if (o1.seq > o2.seq) {
+                    return 1;
+                }
+                if (o2.seq > o1.seq) {
+                    return -1;
+                }
+                return 0;
             }
         });
         for (SeqTcpData tcp : tcps) {
-//            log.debug("-----------3333---------FK-- " + key + " SEQ:" + (tcp.seq - baseSeq));
+            // log.debug("-----------3333---------FK-- " + key + " SEQ:" +
+            // (tcp.seq - baseSeq));
             byte[] data = tcp.data;
             try {
                 bos.write(data);
