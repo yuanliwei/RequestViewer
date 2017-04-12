@@ -1,1 +1,0 @@
-java -Dfile.encoding=utf-8 -jar requestviewer-0.0.1-SNAPSHOT-jar-with-dependencies.jar
