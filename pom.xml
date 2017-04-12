@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ylw</groupId>
 	<artifactId>requestviewer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>RequestViewer</name>
 	<description>网络请求数据查看工具</description>
 	<build>
